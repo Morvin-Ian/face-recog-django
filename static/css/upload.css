@@ -1,0 +1,51 @@
+.container{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  position: relative;
+  top: 10%;
+  margin-top: 20px;
+}
+
+label{
+  margin-bottom: 20px;
+  cursor: pointer;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+#response{
+  position: absolute;
+  top: 10%; 
+  border-radius: 10px;
+  display: none;
+}
+
+#none{
+  position: absolute;
+  top: 20%; 
+  border-radius: 4px;
+  display: none;
+}
+
+#imageElement{
+object-fit: cover;
+position: absolute;
+top: 40%;
+
+}
+
+#loader{
+position: absolute;
+top: 50%;
+display: none;
+}
+
+#loader p{
+background-color: white;
+padding: 10px 20px;
+border-radius: 3px;
+
+}

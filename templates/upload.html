@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="{% static 'css/upload.css' %}"> -->
+    <script src="https://kit.fontawesome.com/ff17244aa6.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="https://www.google.com/imgres?imgurl=https%3A%2F%2Fimg.lovepik.com%2Ffree-png%2F20220125%2Flovepik-transport-logo-png-image_401745910_wh300.png&tbnid=gLfl47yuen-ihM&vet=12ahUKEwiz7dmgnI3-AhUkrycCHfzCAWUQMygWegUIARDtAQ..i&imgrefurl=https%3A%2F%2Flovepik.com%2Fimages%2Fpng-logo.html&docid=36PYbzHSjXm6ZM&w=300&h=300&q=logo%20images%20with%20no%20bg&client=ubuntu-sn&ved=2ahUKEwiz7dmgnI3-AhUkrycCHfzCAWUQMygWegUIARDtAQ" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>STREAM</title>
+</head>
+<body>
+
+  <style>
+    .container{
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      position: relative;
+      top: 10%;
+      margin-top: 20px;
+    }
+
+    label{
+      margin-bottom: 20px;
+      cursor: pointer;
+      background-color: black;
+      color: white;
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    #response{
+      position: absolute;
+      top: 10%; 
+      border-radius: 10px;
+      display: none;
+   }
+
+   #none{
+      position: absolute;
+      top: 20%; 
+      border-radius: 4px;
+      display: none;
+   }
+
+   #imageElement{
+    object-fit: cover;
+    position: absolute;
+    top: 40%;
+
+   }
+
+   #loader{
+    position: absolute;
+    top: 50%;
+    display: none;
+   }
+
+   #loader p{
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 3px;
+
+   }
+  </style>
+
+  <div class="container">
+    
+    <div style="flex-basis: 90%;" class="video">
+      <input style="display: none;" type="file" id="file-input" accept="video/*">
+      <label for="file-input" class="btn btn-outline-dark mt-3"> Movie Upload</label>
+      <button id="screenshot"  class="btn btn-outline-primary" >[ ] Snapshot </button> <br>
+      <video style="width: 100%;" id="video-player" controls></video>
+    </div>
+
+    <div id="none" class="card text-center">
+      <div class="card-header">
+        <h5> No Such Actor</h5> <br> 
+
+        This might be due to:
+        <ul class="text-start mt-1">
+          <li class="text-start ">Database Limitation</li>
+          <li class="text-start">Poor screenshot quality</li>
+          <li class="text-start">Poor Capture Angle (Ensure you capture Entire face)</li>
+
+        </ul> 
+
+        <div class="flex">
+          <button onclick="document.getElementById('none').style.display='none'" class="btn btn-outline-danger btn-sm mt-2">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="loader">
+      <p>Searching ....</p>
+    </div>
+
+    <div id="response" class="card text-center">
+      <div id="name" class="card-header">
+        
+      </div>
+      <div style="background-color: rgb(225, 225, 225);" class="card-body">
+        <h5 class="card-title">Biography</h5>
+        <p style="font-size: small;" id="description" class="text-start text-wrap"></p>
+
+        <p style="font-weight: bold;" class="text-start">Date of Birth:
+          <span style="font-weight: lighter; font-size: small;" id="dob" class="text-start"></span>
+        </p>
+
+        <p style="font-weight: bold;" class="text-start">Maritial Status:
+          <span style="font-weight: lighter; font-size: small;" id="maritial" class="text-start"></span>
+        </p>
+
+        <h6 class="text-start">Movies Casted</h6>
+        <p style="font-size: x-small;" id="movies" class="text-start">
+          
+        </p>
+
+        <img id="imageElement" src="" alt="" height="200px" width="300px">
+        
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center;" class="card-footer text-muted">
+        <form action="https://google.com/search" method="get" target="_blank">
+          <button id="more" type="submit" class="btn btn-outline-primary me-3" name="q" value="actors">More Info</button>
+       </form>
+        <button onclick="Hide()" class="btn btn-outline-danger">Close</button>
+      </div>
+    </div>    
+  </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript"src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script type="text/javascript">
+
+      const input = document.getElementById('file-input');
+      const player = document.getElementById('video-player');
+      const nullData = document.getElementById("none")
+      const loader = document.getElementById("loader")
+
+      
+    
+      input.addEventListener('change', function(event) {
+        nullData.style.display = 'none';
+
+        const file = event.target.files[0];
+        if (!file.type.startsWith('video/')) {
+          console.error('Invalid file type');
+          return;
+        }
+        const reader = new FileReader();
+        reader.addEventListener('load', function(event) {
+          const videoBlob = new Blob([event.target.result], { type: file.type });
+          player.src = URL.createObjectURL(videoBlob);
+        });
+        reader.readAsArrayBuffer(file);
+      });
+
+
+        $('#screenshot').click(()=> {
+            const screenshotTarget = document.body;
+            html2canvas(screenshotTarget).then(canvas => {
+            	// to image as png use below line
+                const base64image = canvas.toDataURL("image/png");
+            	// show the image in window use below line
+                // window.location.href = base64image;
+            	
+            	// screenshot appended to the body as canvas
+                // document.body.appendChild(canvas);  
+                dataURL = canvas.toDataURL();  
+                // to print the screenshot in console use below line
+                // console.log(dataURL);
+                
+                // following line is optional and it is to save the screenshot
+                // on the server side. It initiates an ajax call
+                loader.style.display = "block";
+                pushScreenshotToServer(dataURL); 
+            });  
+        });
+
+        const pushScreenshotToServer = (dataURL) =>{
+          const url = "/screenshot/";
+          const data = { screenshot: dataURL }
+
+          fetch(url, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+
+              body: JSON.stringify(data)
+          })
+          .then(
+            response=>response.json()
+          )
+          .then(data=>{
+              const responseView = document.getElementById('response')
+              const imageElement = document.getElementById('imageElement')
+              const name = document.getElementById('name')
+              const description = document.getElementById('description')
+              const movies = document.getElementById('movies');
+              const dob = document.getElementById('dob');
+              const maritial = document.getElementById('maritial');
+              const more = document.getElementById("more")
+
+
+              const nullData = document.getElementById("none")
+
+              loader.style.display = "none";
+              nullData.style.display = 'none';
+
+
+              if (data == null){
+                nullData.style.display = 'block';
+              }
+
+              else{
+                responseView.style.display = 'block'
+                name.innerText = data["name"]
+                description.innerText = data["description"]
+                dob.innerText = data["dob"]
+                maritial.innerText = data["maritial_status"]
+                more.value = data["name"]
+
+
+                movies.innerText="";
+
+                for(let x = 0; x < data["movies"].length; x++ ){
+                  const listItem = document.createElement("li");
+                  listItem.innerText =  data["movies"][x];
+                  movies.appendChild(listItem)
+                  
+
+                }
+        
+
+                const encodedImage = data['image'];
+                // Decode the base64 string to binary data
+                const decodedImage = atob(encodedImage);
+
+                // Convert the binary data to a Uint8Array
+                const imageArray = new Uint8Array(decodedImage.length);
+                for (let i = 0; i < decodedImage.length; i++) {
+                  imageArray[i] = decodedImage.charCodeAt(i);
+                }
+
+                // Create a Blob from the Uint8Array with the appropriate MIME type
+                const blob = new Blob([imageArray], { type: "image/jpeg" }); // Replace "image/jpeg" with the appropriate MIME type of the image
+
+                // Create an object URL for the Blob
+                const imageUrl = URL.createObjectURL(blob);
+                imageElement.src = imageUrl;
+
+                }
+                
+             
+            })
+        }
+
+
+        const Hide = ()=>{
+          const responseView = document.getElementById('response')
+          responseView.style.display = 'none'
+        }
+
+
+        
+
+    </script>
+    
+    </script>
+
+    
+</body>
+</html>
